@@ -32,7 +32,7 @@ Could have:
 - Patch Descriptor (feature detection method)
 
 Wont Have:
-- Any simelaritys between my work and Joris Heemskerk's work (same challenge). :)
+- Any similarities between mine and Joris Heemskerk's work (same challenge). :)
 
 Week 3:
 - Look further into the above named methods (potentially shift around the must/should/could methods based on findings).
