@@ -19,7 +19,7 @@ De paper maakt gebruik van de volgende methoden:
 Dit zijn er alleen een beetje veel voor deze opdracht dus ik ga hier waarschijnlijk een stuk of 2/3 van moeten uitkiezen om de opdracht mee te doen. Deze keuze moet ik nog maken.
 
 
-Planning stuffs:
+# Planning
 
 Must have:
 - Character recognition through bag-of-visual-words using (potentially multiple) feature detection method(s).
@@ -34,18 +34,18 @@ Could have:
 Wont Have:
 - Any similarities between mine and Joris Heemskerk's work (same challenge). :)
 
-Week 3:
-- Look further into the above named methods (potentially shift around the must/should/could methods based on findings).
-- Start implementing must have method
-
 Week 4:
-- Finish implementation of must have method
-- Start implementing should have method
+- Look further into the above named methods (potentially shift around the must/should/could methods based on findings).
+- Start implementing must have method (Hopefully be able to recognize some characters, doesnt need to be all that accurate yet)
 
 Week 5:
-- Finish implemention of should have method.
+- Finish implementation of must have method
+- Start implementing should have method (Goal being to increase accuracy by having the two methods work together)
+
+Week 6:
+- Finish implemention of should have method. (At this point I hope it will be usably accurate, within reason)
 - Hopefully start on could haves
 
-Weeks 6 onward TBD, no telling how far along things will be at this point, although I hope to be done around week 6, if at all possible.
+Weeks 7 onward TBD, no telling how far along things will be at this point, although I hope to be done around week 7, if at all possible.
 
 Planning so far might be optimistic, so I'll likely have to scale things back and revisit, but we'll see :).
