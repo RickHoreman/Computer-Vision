@@ -35,17 +35,18 @@ Wont Have:
 - Any similarities between mine and Joris Heemskerk's work (same challenge). :)
 
 Week 4:
-- Look further into the above named methods (potentially shift around the must/should/could methods based on findings).
-- Start implementing must have method (Hopefully be able to recognize some characters, doesnt need to be all that accurate yet)
+- Work on weekly assignments (these are helpful for knowing what to do for this challenge)
 
 Week 5:
-- Finish implementation of must have method
-- Start implementing should have method (Goal being to increase accuracy by having the two methods work together)
+- Finish weekly assignments
 
 Week 6:
-- Finish implemention of should have method. (At this point I hope it will be usably accurate, within reason)
-- Hopefully start on could haves
+- Monday/Tuesday: work on must have method, hopefully get initial (though low accuracy) character recognition working
+- Saturday/Sunday: potentially start work on should have method (depends on how I'm feeling, if I really _need_ the weekend I'll take it)
 
-Weeks 7 onward TBD, no telling how far along things will be at this point, although I hope to be done around week 7, if at all possible.
+Weeks 7:
+- Monday: work on should have method, increase accuracy
+- Tuesday: finish should have, start work on could have if possible
+- Saturday/Sunday: if the should have is not done yet I'll make sure to at least finish that, and if I'm feeling optimistic I might even finish the could have, if the should have was already done
 
-Planning so far might be optimistic, so I'll likely have to scale things back and revisit, but we'll see :).
+The other days in weeks 6 & 7 are for SysEn and R2D2
