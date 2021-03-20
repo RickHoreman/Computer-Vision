@@ -1,0 +1,46 @@
+First things first I needed to be able to load the lists (provided, with trainings, testing, etc indexes) and the images into a usable format.
+The lists are provided in .mat format. I found out how to load those with scipy. I used the following code to then disect the resulting dictionary filled with various numpy arrays.
+
+# mat = sio.loadmat('Data/Lists/English/Img/lists.mat')
+# test = mat['list'][0][0][0] <-- changed this up repeatedly to discover the values listed below
+# print("Content:")
+# print(test)
+# print("Type:")
+# print(type(test))
+# print("Len:")
+# print(len(test))
+# print("shape:")
+# print(test.shape)
+# print((test == mat['list'][0][0][8]).all())  <-- used this to see if 8 and 9 were actually identical
+
+# 0 == ALLnames
+# 1 == ???????? starts with 1 ends on 0, len of 1 per image (appears to be a weird extra thing, no clue, we have everything we need)
+# 2 == ALLlabels
+# 3 == classlabels
+# 4 == classnames
+# 5 == NUMclasses
+# 6 == TSTind
+# 7 == VALind
+# 8 == TRNind == 9 == TXNind
+
+After this I had a usable understanding of the .mat lists and went on to loading the images.
+
+I tried using the following code to find the lowest resolution in the dataset so that I could resize all images to that resolution:
+
+# sizes=[]
+# for i in range(len(allNames)):
+#     filename = os.path.join('Data/English/Img/' + allNames[i] + '.png')
+#     img = skimage.io.imread(filename)
+#     sizes.append(img.shape)
+# print(min(sizes))
+# smallest size == (6, 13, 3)
+
+But it turned out to be only 6x13 pixels, which seemed a bit too low. (this was almost certainly of the images flagged as 'bad')
+So I decided to go with 50x50 for now.
+
+Due to it taking rather long to open all the image files and then resize them all, I decided to save the numpy arrays to a file, which can later be opened much faster.
+The code for this can be found in ImageProcessing.py
+!!! ImageProcessing.py must be ran before anything else will work !!! (the .npy files were too large for github)
+
+I am now all setup to be able to use all the images together with their labels. On to the actual cool stuff!
+
