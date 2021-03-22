@@ -44,3 +44,48 @@ The code for this can be found in ImageProcessing.py
 
 I am now all setup to be able to use all the images together with their labels. On to the actual cool stuff!
 
+I was first planning on doing Geometric Blur as my first feature detection method, but after some research and careful consideration I decided this was too complicated and not explained clearly enough anywhere that I could find.
+I then decided to try out Patch Descriptor, but that too ended up being to complicated, at least for starters.
+And I don't have particularly much time left at this point so I've decided to just go for a Support Vector Classifier and some basic stuff like value histograms and sobel edge detection as imput.
+I'm also switching over to the Fnt dataset, which should be much easier to work with.
+
+But that does mean I need to unravel a new .m list :(
+    "Ahw shiit, here we go agane"
+
+mat = sio.loadmat('Data/Lists/English/Fnt/lists.20.mat')
+test = mat['list'][0][0][8] #<-- changed this up repeatedly to discover the values listed below
+print("Content:")
+print(test)
+print("Type:")
+print(type(test))
+print("Len:")
+print(len(test))
+print("shape:")
+print(test.shape)
+
+# 0 == ALLlabels
+# 1 == Allnames
+# 2 == classlabels
+# 3 == classnames
+# 4 == NUMclasses
+# 5 == TRNind
+# 6 == TSTind
+# 7 == VALind
+# 8 == TXNind
+
+Luckily this time around the order actual made sense
+
+Looking at the images I suspect they are all the same size (128x128), but let's make sure using the following code:
+
+sizes=[]
+for i in range(len(allNames)):
+    filename = os.path.join('Data/English/Fnt/' + allNames[i] + '.png')
+    img = skimage.io.imread(filename)
+    sizes.append(img.shape)
+print(min(sizes))
+print(max(sizes))
+
+And yes indeed both print statements return (128, 128)
+Despite them all being the same size already, I do want to downscale them a bit to 32x32. (Might increase this to 64x64 in the future)
+(.npy files now total to 7.21GB, just to warn you :p, I know this is very inefficient with file compression and all that, but it just makes runtime that much faster...)
+

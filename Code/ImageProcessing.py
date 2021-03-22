@@ -6,33 +6,32 @@ from skimage.viewer import ImageViewer
 import matplotlib.pyplot as plt
 from skimage.transform import resize
 
-mat = sio.loadmat('Data/Lists/English/Img/lists.mat')
-allNames = mat['list'][0][0][0]
-trainIndexes = mat['list'][0][0][8]
+mat = sio.loadmat('Data/Lists/English/Fnt/lists.20.mat')
+allNames = mat['list'][0][0][1]
+trainIndexes = mat['list'][0][0][5]
 testIndexes = mat['list'][0][0][6]
-allLabels = mat['list'][0][0][2]
+allLabels = mat['list'][0][0][0]
 
-allImages = np.empty((len(allNames), 50, 50, 3))
-trainImages = np.empty((len(trainIndexes)*len(trainIndexes[0]), 50, 50, 3))
+allImages = np.empty((len(allNames), 32,32))
+trainImages = np.empty((len(trainIndexes)*len(trainIndexes[0]), 32,32))
 trainLabels = np.empty((len(trainIndexes)*len(trainIndexes[0])))
-testImages = np.empty((len(testIndexes)*len(testIndexes[0]), 50, 50, 3))
+testImages = np.empty((len(testIndexes)*len(testIndexes[0]), 32,32))
 testLabels = np.empty((len(testIndexes)*len(testIndexes[0])))
 
 for i in range(len(allNames)):  #Opening and resizing all images
-    filename = os.path.join('Data/English/Img/' + allNames[i] + '.png')
-    allImages[i] = resize(skimage.io.imread(filename),(50,50, 3)) #Not sure if this method of resizing is optimal, but I'm using it for now
+    filename = os.path.join('Data/English/Fnt/' + allNames[i] + '.png')
+    allImages[i] = resize(skimage.io.imread(filename),(32,32)) #Not sure if this method of resizing is optimal, but I'm using it for now
     percent = round(i/(len(allNames)-1)*100, 2)
     print("Opening & resizing all images: [{:20s}] {}%".format('='*int(percent//5), percent), end='\r')
 print()
 
 for i in range(len(trainIndexes)):
     for j in range(len(trainIndexes[i])):
-        if trainIndexes[i][j] > 0:
-            trainIndex = trainIndexes[i][j]-1 #Indexes in the list start on 1 :/ but to make things even worse there are also 0's in the list
-            trainImages[(i*len(trainIndexes[i]))+j] = allImages[trainIndex] 
-            trainLabels[(i*len(trainIndexes[i]))+j] = allLabels[trainIndex]
-            percent = round(((i*len(trainIndexes[i]))+j)/((len(trainIndexes)*len(trainIndexes[i]))-1)*100, 2)
-            print("Selecting and labeling training images: [{:20s}] {}%".format('='*int(percent//5), percent), end='\r')
+        trainIndex = trainIndexes[i][j]-1 #Indexes in the list start on 1 :/
+        trainImages[(i*len(trainIndexes[i]))+j] = allImages[trainIndex] 
+        trainLabels[(i*len(trainIndexes[i]))+j] = allLabels[trainIndex]
+        percent = round(((i*len(trainIndexes[i]))+j)/((len(trainIndexes)*len(trainIndexes[i]))-1)*100, 2)
+        print("Selecting and labeling training images: [{:20s}] {}%".format('='*int(percent//5), percent), end='\r')
 print()
 
 for i in range(len(testIndexes)):
@@ -45,13 +44,17 @@ for i in range(len(testIndexes)):
             print("Selecting and labeling testing images: [{:20s}] {}%".format('='*int(percent//5), percent), end='\r')
 print()
 
-with open('Data/npy/trainImages.npy', 'wb') as f:
+print("Saving to files", end='\r')
+with open('Data/trainImages.npy', 'wb') as f:
     np.save(f, trainImages)
-with open('Data/npy/trainLabels.npy', 'wb') as f:
+print("Saving to files.", end='\r')
+with open('Data/trainLabels.npy', 'wb') as f:
     np.save(f, trainLabels)
-with open('Data/npy/testImages.npy', 'wb') as f:
+print("Saving to files..", end='\r')
+with open('Data/testImages.npy', 'wb') as f:
     np.save(f, testImages)
-with open('Data/npy/testLabels.npy', 'wb') as f:
+print("Saving to files...")
+with open('Data/testLabels.npy', 'wb') as f:
     np.save(f, testLabels)
 
 print("Done!")
