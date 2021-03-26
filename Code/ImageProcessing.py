@@ -58,10 +58,3 @@ with open('Data/testLabels.npy', 'wb') as f:
     np.save(f, testLabels)
 
 print("Done!")
-
-# with open('allImages.npy', 'rb') as f:
-#     allImages = np.load(f)
-
-# viewer = ImageViewer(allImages[700])
-# viewer.show()
-#print(allImages)

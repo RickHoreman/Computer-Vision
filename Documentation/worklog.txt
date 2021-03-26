@@ -89,3 +89,16 @@ And yes indeed both print statements return (128, 128)
 Despite them all being the same size already, I do want to downscale them a bit to 32x32. (Might increase this to 64x64 in the future)
 (.npy files now total to 7.21GB, just to warn you :p, I know this is very inefficient with file compression and all that, but it just makes runtime that much faster...)
 
+I decided to start simple, and simply chuck the images, as is, into the sklearn Support Vector Machine, which I train and save to a file in one .py and then load up and test in another.
+When I first ran this, the training alone took way too long, and I had real indication of how long it would take, so I decided to narrow things down to just the first 10 classes; the digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+This training went *MUCH* faster, and the testing was also reasonably fast... but then came the weird thing. It claimed to be 100% accurate... (With a total of 101600 testing images, containing duplicates, because thats just how the provided lists are...)
+
+So ofcourse I first had a thorough look at the bit of code that determined this percentage, but it seems all good.
+Next up I checked that I wasnt changing around the train and test datasets anywhere, because ofcourse it would be good if it is testing on the same data as it is training...
+But alas, even that seemed to all be fine.
+
+Except one thing... I never made sure the train and test datasets as specified in the provided lists dont actually overlap... So I'll be checking that next.
+
+Before that I ran the thing with all classes, which took ages, and resulted in 604319 out of 629920 images being correctly predicted. Resulting in an accuracy of roughly 95.9%
+While still absurdly high, this does seem more reasonable than 100%, but I still want to test the overlap between the sets, and possibly reduce the dataset sizes so it no longer contains duplicates (for example the train set containing image nr 420 over 5 times)
+
