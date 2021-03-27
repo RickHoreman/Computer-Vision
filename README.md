@@ -1,3 +1,21 @@
+# Getting Started
+
+First things first I would recommend you have a look at the documentation folder, which currently contains a worklog.txt I kept while working on everything, and soon will contain a proper report.
+
+Then if you want to see the thing in action run the following files in this order:
+1. ImageProcessing.py - This will make 4 .npy files in the data folder
+2. trainCLF.py - This will make a clf.joblib file in the data folder (with the current version these files add up to be <1GB but do mind you need _some_ free space)
+3. testCLF.py - This will tell you the accuracy in % and exactly which images it failed to identify, what it thought they were and what they actually are.
+
+There are some values in these files that can be tweaked to change the used methods, resolution, etc. I'll leave these at the ones that gave me the best results.
+If I had the time I would have loved to make a proper testing interface like a single function call with some changeable parameters, or maybe even running the .py file with certain parameters, but the deadline is (as of writing) tomorrow, sooooo...
+
+
+
+
+
+//// Under here is the "old" README containing the first assignment of choosing what you were going to do (sorry for the language inconsistency) and the planning.
+
 # Computer-Vision
 
 Voor de computer vision eindopdracht ga ik voor keuze 2: een challenge.
