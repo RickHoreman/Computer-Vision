@@ -6,6 +6,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from joblib import dump
+import preProcessing as pp
 
 print("Opening training data", end='\r')
 with open('Data/trainImages.npy', 'rb') as f:
@@ -13,6 +14,8 @@ with open('Data/trainImages.npy', 'rb') as f:
 
 with open('Data/trainLabels.npy', 'rb') as f:
     trainLabels = np.load(f)
+
+#trainImages = pp.applyPreProcessing(trainImages, "sobel", show = True)
 
 flatTrainImages = np.reshape(trainImages, (len(trainImages), (len(trainImages[0])*len(trainImages[0][0]))))
 

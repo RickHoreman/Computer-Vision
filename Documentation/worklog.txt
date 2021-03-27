@@ -102,3 +102,42 @@ Except one thing... I never made sure the train and test datasets as specified i
 Before that I ran the thing with all classes, which took ages, and resulted in 604319 out of 629920 images being correctly predicted. Resulting in an accuracy of roughly 95.9%
 While still absurdly high, this does seem more reasonable than 100%, but I still want to test the overlap between the sets, and possibly reduce the dataset sizes so it no longer contains duplicates (for example the train set containing image nr 420 over 5 times)
 
+For testing the number dupes between the train and test sets I inserted the following code on line 21 of ImageProcessing.py:
+
+uTrain = np.unique(trainIndexes)
+uTest = np.unique(testIndexes)
+nDupes = 0
+nUnique = 0
+for i in uTrain:
+    if i in uTest:
+        nDupes+=1
+    else:
+        nUnique+=1
+    print("Number of dupes: {}      Number of uniques: {}".format(nDupes, nUnique), end='\r')
+print()
+
+Which gave the following output: "Number of dupes: 62797      Number of uniques: 0"
+
+Well god damnit, there u go, they both contain all the same images...
+
+I guess I'll be making my own split now, and while I'm at it they wont be having any duplicates within the sets either, that should decrease the size and training time significantly.
+
+My new code that splits the dataset into roughly 2/3 training and 1/3 testing gives me the following: "tst: 20945 trn: 42047    Number of dupes: 0      Number of uniques: 42047" (Where the first set of numbers is the length of both sets)
+
+The way I make this split using random does mean that every time ImageProcessing.py is ran the split will be somewhat different, and I cannot guarentee that there is a good class balance,
+but I think that's fine for the purpose of comparing different methods, parameters, etc.
+
+After running the current version of everything I get an accuracy of 87.9%, which is still really good, and a much more accurate estimate of real-world results, considering the training and testing sets no longer overlap :)
+
+I've seen other people have succes in lowering the resolution of their samples, so I'll give that a shot and see what happens, starting with 16x16 down from 32x32 
+(note worthy that this will require re-running ImageProcessing.py, which I've seen cause a difference of about 0.5% due to the training and testing sets changing)
+
+The reduced size took with it the accuracy, against expectations, I'm now getting 83.0%.
+I am now interested in seeing what happens if I instead increase the size to 64x64
+
+After running this test, which in all took about half an hour a.k.a way too long, we get an accuracy of 88.7%, which is a marginal improved over 32x32 and I my opinion not worth the *much* longer time it takes to train and the much slower predictions.
+
+So 32x32 it is then, for chucking the unprocessed pixel values into the SVM anyways. Next I want to look at what happens if I do some more pre-processing, such as a sobel filter (which is where I've actually seen people get better results with lower resolutions).
+Sobel at 32x32 gives an 85.7% accuracy, as it stands, lower than simply giving the images as is to the SVM. I'm interested in seeing the results with lowered resolution, and ultimately I would love to try making something like the patch descriptors from the paper linked in the readme.
+But as it stands I dont have much time left so I'll see what I can still do.
+
