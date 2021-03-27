@@ -23,13 +23,13 @@ Dit zijn er alleen een beetje veel voor deze opdracht dus ik ga hier waarschijnl
 
 Must have:
 - Character recognition through bag-of-visual-words using (potentially multiple) feature detection method(s).
-- Geometric blur (feature detection method)
+- Some better than random guess accuracy.
 
 Should have:
-- Spin image (feature detection method)
+- A usable character recognision on the fnt dataset
 
 Could have:
-- Patch Descriptor (feature detection method)
+- One or more of the actual methods for the paper (these turned out to be more complicated than I thought)
 
 Wont Have:
 - Any similarities between mine and Joris Heemskerk's work (same challenge). :)
@@ -41,12 +41,13 @@ Week 5:
 - Finish weekly assignments
 
 Week 6:
-- Monday/Tuesday: work on must have method, hopefully get initial (though low accuracy) character recognition working
-- Saturday/Sunday: potentially start work on should have method (depends on how I'm feeling, if I really _need_ the weekend I'll take it)
+- Monday/Tuesday: Actually finish last weekly assignment, and make all of the image loading and preprocessing stuff
+- Saturday/Sunday: Looking into the methods from the paper (took way too long)
 
 Weeks 7:
-- Monday: work on should have method, increase accuracy
-- Tuesday: finish should have, start work on could have if possible
-- Saturday/Sunday: if the should have is not done yet I'll make sure to at least finish that, and if I'm feeling optimistic I might even finish the could have, if the should have was already done
-
-The other days in weeks 6 & 7 are for SysEn and R2D2
+- Monday: More looking into the methods from the paper, and ultimately deciding to start working on a simpler version with the stuff I learned from the weekly assignments
+- Tuesday: Start work on simple version
+- Wednesday: R2D2 stuffs
+- Thursday: Finish initial simple version
+- Friday: Debug absurdly high initial accuracy
+- Saturday/Sunday: Improve on simple version

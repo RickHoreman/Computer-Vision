@@ -1,0 +1,143 @@
+First things first I needed to be able to load the lists (provided, with trainings, testing, etc indexes) and the images into a usable format.
+The lists are provided in .mat format. I found out how to load those with scipy. I used the following code to then disect the resulting dictionary filled with various numpy arrays.
+
+# mat = sio.loadmat('Data/Lists/English/Img/lists.mat')
+# test = mat['list'][0][0][0] <-- changed this up repeatedly to discover the values listed below
+# print("Content:")
+# print(test)
+# print("Type:")
+# print(type(test))
+# print("Len:")
+# print(len(test))
+# print("shape:")
+# print(test.shape)
+# print((test == mat['list'][0][0][8]).all())  <-- used this to see if 8 and 9 were actually identical
+
+# 0 == ALLnames
+# 1 == ???????? starts with 1 ends on 0, len of 1 per image (appears to be a weird extra thing, no clue, we have everything we need)
+# 2 == ALLlabels
+# 3 == classlabels
+# 4 == classnames
+# 5 == NUMclasses
+# 6 == TSTind
+# 7 == VALind
+# 8 == TRNind == 9 == TXNind
+
+After this I had a usable understanding of the .mat lists and went on to loading the images.
+
+I tried using the following code to find the lowest resolution in the dataset so that I could resize all images to that resolution:
+
+# sizes=[]
+# for i in range(len(allNames)):
+#     filename = os.path.join('Data/English/Img/' + allNames[i] + '.png')
+#     img = skimage.io.imread(filename)
+#     sizes.append(img.shape)
+# print(min(sizes))
+# smallest size == (6, 13, 3)
+
+But it turned out to be only 6x13 pixels, which seemed a bit too low. (this was almost certainly of the images flagged as 'bad')
+So I decided to go with 50x50 for now.
+
+Due to it taking rather long to open all the image files and then resize them all, I decided to save the numpy arrays to a file, which can later be opened much faster.
+The code for this can be found in ImageProcessing.py
+!!! ImageProcessing.py must be ran before anything else will work !!! (the .npy files were too large for github)
+
+I am now all setup to be able to use all the images together with their labels. On to the actual cool stuff!
+
+I was first planning on doing Geometric Blur as my first feature detection method, but after some research and careful consideration I decided this was too complicated and not explained clearly enough anywhere that I could find.
+I then decided to try out Patch Descriptor, but that too ended up being to complicated, at least for starters.
+And I don't have particularly much time left at this point so I've decided to just go for a Support Vector Classifier and some basic stuff like value histograms and sobel edge detection as imput.
+I'm also switching over to the Fnt dataset, which should be much easier to work with.
+
+But that does mean I need to unravel a new .m list :(
+    "Ahw shiit, here we go agane"
+
+mat = sio.loadmat('Data/Lists/English/Fnt/lists.20.mat')
+test = mat['list'][0][0][8] #<-- changed this up repeatedly to discover the values listed below
+print("Content:")
+print(test)
+print("Type:")
+print(type(test))
+print("Len:")
+print(len(test))
+print("shape:")
+print(test.shape)
+
+# 0 == ALLlabels
+# 1 == Allnames
+# 2 == classlabels
+# 3 == classnames
+# 4 == NUMclasses
+# 5 == TRNind
+# 6 == TSTind
+# 7 == VALind
+# 8 == TXNind
+
+Luckily this time around the order actual made sense
+
+Looking at the images I suspect they are all the same size (128x128), but let's make sure using the following code:
+
+sizes=[]
+for i in range(len(allNames)):
+    filename = os.path.join('Data/English/Fnt/' + allNames[i] + '.png')
+    img = skimage.io.imread(filename)
+    sizes.append(img.shape)
+print(min(sizes))
+print(max(sizes))
+
+And yes indeed both print statements return (128, 128)
+Despite them all being the same size already, I do want to downscale them a bit to 32x32. (Might increase this to 64x64 in the future)
+(.npy files now total to 7.21GB, just to warn you :p, I know this is very inefficient with file compression and all that, but it just makes runtime that much faster...)
+
+I decided to start simple, and simply chuck the images, as is, into the sklearn Support Vector Machine, which I train and save to a file in one .py and then load up and test in another.
+When I first ran this, the training alone took way too long, and I had real indication of how long it would take, so I decided to narrow things down to just the first 10 classes; the digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+This training went *MUCH* faster, and the testing was also reasonably fast... but then came the weird thing. It claimed to be 100% accurate... (With a total of 101600 testing images, containing duplicates, because thats just how the provided lists are...)
+
+So ofcourse I first had a thorough look at the bit of code that determined this percentage, but it seems all good.
+Next up I checked that I wasnt changing around the train and test datasets anywhere, because ofcourse it would be good if it is testing on the same data as it is training...
+But alas, even that seemed to all be fine.
+
+Except one thing... I never made sure the train and test datasets as specified in the provided lists dont actually overlap... So I'll be checking that next.
+
+Before that I ran the thing with all classes, which took ages, and resulted in 604319 out of 629920 images being correctly predicted. Resulting in an accuracy of roughly 95.9%
+While still absurdly high, this does seem more reasonable than 100%, but I still want to test the overlap between the sets, and possibly reduce the dataset sizes so it no longer contains duplicates (for example the train set containing image nr 420 over 5 times)
+
+For testing the number dupes between the train and test sets I inserted the following code on line 21 of ImageProcessing.py:
+
+uTrain = np.unique(trainIndexes)
+uTest = np.unique(testIndexes)
+nDupes = 0
+nUnique = 0
+for i in uTrain:
+    if i in uTest:
+        nDupes+=1
+    else:
+        nUnique+=1
+    print("Number of dupes: {}      Number of uniques: {}".format(nDupes, nUnique), end='\r')
+print()
+
+Which gave the following output: "Number of dupes: 62797      Number of uniques: 0"
+
+Well god damnit, there u go, they both contain all the same images...
+
+I guess I'll be making my own split now, and while I'm at it they wont be having any duplicates within the sets either, that should decrease the size and training time significantly.
+
+My new code that splits the dataset into roughly 2/3 training and 1/3 testing gives me the following: "tst: 20945 trn: 42047    Number of dupes: 0      Number of uniques: 42047" (Where the first set of numbers is the length of both sets)
+
+The way I make this split using random does mean that every time ImageProcessing.py is ran the split will be somewhat different, and I cannot guarentee that there is a good class balance,
+but I think that's fine for the purpose of comparing different methods, parameters, etc.
+
+After running the current version of everything I get an accuracy of 87.9%, which is still really good, and a much more accurate estimate of real-world results, considering the training and testing sets no longer overlap :)
+
+I've seen other people have succes in lowering the resolution of their samples, so I'll give that a shot and see what happens, starting with 16x16 down from 32x32 
+(note worthy that this will require re-running ImageProcessing.py, which I've seen cause a difference of about 0.5% due to the training and testing sets changing)
+
+The reduced size took with it the accuracy, against expectations, I'm now getting 83.0%.
+I am now interested in seeing what happens if I instead increase the size to 64x64
+
+After running this test, which in all took about half an hour a.k.a way too long, we get an accuracy of 88.7%, which is a marginal improved over 32x32 and I my opinion not worth the *much* longer time it takes to train and the much slower predictions.
+
+So 32x32 it is then, for chucking the unprocessed pixel values into the SVM anyways. Next I want to look at what happens if I do some more pre-processing, such as a sobel filter (which is where I've actually seen people get better results with lower resolutions).
+Sobel at 32x32 gives an 85.7% accuracy, as it stands, lower than simply giving the images as is to the SVM. I'm interested in seeing the results with lowered resolution, and ultimately I would love to try making something like the patch descriptors from the paper linked in the readme.
+But as it stands I dont have much time left so I'll see what I can still do.
+
