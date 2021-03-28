@@ -1,6 +1,6 @@
 # Getting Started
 
-First things first I would recommend you have a look at the documentation folder, which currently contains a worklog.txt I kept while working on everything, and soon will contain a proper report.
+First things first I would recommend you have a look at the documentation folder, which currently contains a worklog.txt I kept while working on everything, and a proper report.
 
 Then if you want to see the thing in action run the following files in this order:
 1. ImageProcessing.py - This will make 4 .npy files in the data folder
