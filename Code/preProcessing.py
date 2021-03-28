@@ -5,6 +5,7 @@ import skimage.filters as skfilt
 import matplotlib.pyplot as plt
 import random
 
+#Meant to be expandable with more pre-processing types
 def applyPreProcessing(images, ppType, show=False):
     resultImages = np.empty((len(images), len(images[0]), len(images[0][0])))
     for i in range(len(images)):

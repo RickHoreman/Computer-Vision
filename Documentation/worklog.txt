@@ -135,9 +135,21 @@ I've seen other people have succes in lowering the resolution of their samples, 
 The reduced size took with it the accuracy, against expectations, I'm now getting 83.0%.
 I am now interested in seeing what happens if I instead increase the size to 64x64
 
-After running this test, which in all took about half an hour a.k.a way too long, we get an accuracy of 88.7%, which is a marginal improved over 32x32 and I my opinion not worth the *much* longer time it takes to train and the much slower predictions.
+After running this test, which in all took about half an hour a.k.a way too long, we get an accuracy of 88.7%, which is a marginal improvement over 32x32 and I my opinion not worth the *much* longer time it takes to train and predict.
 
 So 32x32 it is then, for chucking the unprocessed pixel values into the SVM anyways. Next I want to look at what happens if I do some more pre-processing, such as a sobel filter (which is where I've actually seen people get better results with lower resolutions).
 Sobel at 32x32 gives an 85.7% accuracy, as it stands, lower than simply giving the images as is to the SVM. I'm interested in seeing the results with lowered resolution, and ultimately I would love to try making something like the patch descriptors from the paper linked in the readme.
 But as it stands I dont have much time left so I'll see what I can still do.
 
+Sobel at 16x16 gives 81.8% accuracy, which is lower than expected, but just to be sure I'll also run it 8x8, altough I'm not expecting much from that.
+Yikes, 8x8 gives an accuracy of 74.9%, which, all things considered, is still pretty high (have a look at the 8x8 images in the Images folder).
+
+So it's pretty clear then, for this particular problem, of recognizing rather clean computer-font text, just putting the images into an SVM raw is better than first doing a Sobel edge detection and using that.
+
+What can still be done - if I had more time I would have done the following:
+
+- Set up a more proper testing environment, making sure the training and testing sets have good class balance and are the same every time, run everything from one central point, and be able to change all variables/parameters there.
+
+- Make a (possibly simpler) version of the patch descriptor method as referenced in the paper associated with this challenge (https://www.scitepress.org/Papers/2009/17701/17701.pdf page 4, under 「4.1 Features」)
+
+- Implement the other originally planned methods from the above paper: Geometric Blur, Spin Image and Patch Descriptor.
